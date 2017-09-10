@@ -4,7 +4,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class FileUtil {
+import static java.lang.String.*;
+
+class FileUtil {
     /**
      * File operator utilites
      * saving to sile
@@ -15,30 +17,25 @@ public class FileUtil {
     FileUtil(String name) {
         this.name = name;
     }
-    public FileUtil() {
-    }
 
-    File file = new File(path+name);
+        void WriteFile(int[][] array) throws IOException {
+        FileWriter filewriter = new FileWriter(new File(path+name));
 
-    void WriteFile(int[][] array) throws IOException {
-        FileWriter filewriter = new FileWriter(new File(name));
-
-        for (int i = 0; i < array.length; i++)
-            for (int j = 0; j < array.length; j++)
+        for (int i = 0; i < array.length; i++){
+            for (int j = 0; j < array.length; j++){
                 filewriter.write(array[i][j] + " ");
-        filewriter.flush();
+        filewriter.flush();}
+    }
     }
 
-    public int[][] ReadFile(String name, int size) throws IOException {
+    int[][] ReadFile(int size) throws IOException {
         int[][] array = new int[size][size];
-        Scanner scannerfile = new Scanner(name);
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array.length; j++) {
-                if (scannerfile.hasNextInt())
-                    array[i][j] = scannerfile.nextInt();
+        Scanner scanner = new Scanner(new File(path + name));
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                        array[i][j] = scanner.nextInt();
+                }
             }
-
-        }
         return array;
     }
 }
