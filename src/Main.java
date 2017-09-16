@@ -6,6 +6,9 @@ public class Main {
     public static void main(String args[]) throws IOException
     {
         int size = 100;
+        int numclasses=4;
+        int delta_max=20;
+        MatrixUtil params= new MatrixUtil(numclasses,size);
         /*
           Images of classes to matrix
           Saving matrixes to .txt for safety
@@ -41,6 +44,7 @@ public class Main {
             matrix.add(array);
             }
             */
-
+        Parallel_System_Dopusk teacher = new Parallel_System_Dopusk(numclasses,size);
+        teacher.Parallel_System_Dopusk(delta_max,size);
 }
 }

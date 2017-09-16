@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 import static java.lang.String.*;
@@ -20,7 +17,6 @@ class FileUtil {
 
         void WriteFile(int[][] array) throws IOException {
         FileWriter filewriter = new FileWriter(new File(path+name));
-
         for (int i = 0; i < array.length; i++){
             for (int j = 0; j < array.length; j++){
                 filewriter.write(array[i][j] + " ");
@@ -38,4 +34,23 @@ class FileUtil {
             }
         return array;
     }
+    void StreamOut(String out) throws IOException {
+        try {
+
+            RandomAccessFile file = new RandomAccessFile(path+name, "rw");
+
+
+            file.skipBytes((int)file.length()); //skip to the end of the file
+
+            file.writeBytes(out+"\n");
+
+            file.close();
+
+        }catch(Exception e){
+
+            System.out.print(e.getMessage());
+
+        }
+    }
+
 }

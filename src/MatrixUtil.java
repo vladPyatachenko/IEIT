@@ -1,4 +1,43 @@
 public class MatrixUtil {
+
+    //Для створення звітів
+    boolean Zvit_Radius_Center,Zvit_Delta;
+    String FT,FT_EXM;
+    String FileName;
+
+    int Kol_class;
+    int Kol_oznak;
+    int Kol_realiz;
+
+    public MatrixUtil(int kol_class, int size) {
+        this.Kol_class = kol_class;
+        this.Kol_oznak = size;
+        this.Kol_realiz = size;
+    }
+    //Для оптимізації системи допусків
+    int delta[]=new int[Kol_oznak];
+    int tclass[]=new int[Kol_class];
+    int tdelta;
+    int Dopusk_ver[]=new int[Kol_oznak];
+    int Dopusk_niz[]=new int[Kol_oznak];
+    // Для оптимізації контейнерів
+    int Center[][]=new int[Kol_class][Kol_oznak];
+    int Radius[]=new int[Kol_class];
+    int no_rab_obl_Radius[]=new int[Kol_class];
+    double pomylka_betta[]=new double[Kol_class];
+    double dostovirn_D1[]=new double[Kol_class];
+    double max_KFE[]=new double[Kol_class];
+    double no_rab_obl_pomylka_betta[]=new double[Kol_class];
+    double no_rab_obl_dostovirn_D1[]=new double[Kol_class];
+    double no_rab_obl_max_KFE[]=new double[Kol_class];
+    int Nav4_matr[][][]=new int [Kol_class][Kol_oznak][Kol_realiz];
+    int Bin_nav4_matr[][][]=new int[Kol_class][Kol_oznak][Kol_realiz];
+    int Kodova_vidstan[][]=new int[2][Kol_realiz];
+    int Class_sosed[] =new int[Kol_class];
+    int do_soseda[]=new int[Kol_class];
+    //Лічильники
+    int Oznaka,Realiz,Klass,kl,t;
+
 }
 /*
 * program Teach;
@@ -173,52 +212,6 @@ end;
     closefile(FT_EXM);
 end;
 
-Procedure Parallel_System_Dopusk(kl:integer;delta_max:integer);
-var e0:real;
-    i_ds,j_ds:integer;
-    a:boolean;
-    my_i,my_j,my_ji,delta_i:integer;
-    f1,f2,f3:textfile;
-    sum_real, em_avg:real;
-    ff_x:integer;
-begin
-
-if Zvit_Delta then
-begin assign(f1,concat('E_delta(параллельный)X',inttostr(kl),'.dat'));
-rewrite(f1);end;
-j_ds:=0;
-e0:=0;
-for i_ds:=0 to delta_max do
-begin
-if (i_ds/20)=trunc(i_ds/20) then write(i_ds,'-');
-for delta_i:=1 to Kol_oznak do
-  delta[delta_i]:=i_ds;
-System_Dopuskov;
-Nav4;
- a:=true;
- for my_i:= 1 to Kol_class do
-  if Radius[my_i]=0 then a:=false;
-if Zvit_Delta then
-begin
-  write(f1,(Dopusk_ver[1]-Dopusk_niz[1])/2,' ',a);
-  for my_i:=1 to Kol_class do
-   write(f1,' ',max_KFE[my_i],' ',Radius[my_i],' ',dostovirn_D1[my_i],' ',pomylka_betta[my_i],' ',Class_sosed[my_i],' ',do_soseda[my_i]);
-  writeln(f1);
-end;
-em_avg:=0;
-for my_i:= 1  to Kol_class do
- em_avg:=em_avg+max_KFE[my_i];
-em_avg:=em_avg/Kol_class;
- if (em_avg>e0)and (a) then begin e0:=em_avg; j_ds:=i_ds;end;
-end;
-writeln;
-for delta_i:=1 to Kol_oznak do
-  delta[delta_i]:=j_ds;
-System_Dopuskov;
-Nav4;
-if Zvit_Delta then closefile(f1);
-end;
-
 
 Procedure Poslidov_System_Dopusk(MY_k:integer;delta_max:integer);
 var
@@ -275,30 +268,7 @@ until em_avg=e_step;
 if Zvit_Delta then closefile(f2);
 end;
 
-Procedure Zavant_Nav4_Matr(num:integer;FName:string);
- var
-  f : TextFile;
-  c: integer;
-  //bitmap_Make_y:Tbitmap;
-  I_make_y,j_make_y:integer;
-begin
-//bitmap_make_y:=Tbitmap.create;
-Write('FileName for ',num,' class:(ENTER=',FName,')');
-Readln(FileName);
-if FileName='' then FileName:=FName;
-   AssignFile(f,FName);//bitmap_make_y. LoadFromFile(FName);
-   Reset(f);
- for i_make_y:=1 to Kol_realiz do
-  for j_make_y:=1 to Kol_oznak do
-   begin
 
- Read(f, c);
-   Nav4_matr[num,i_make_y,j_make_y]              := c; //getRvalue(bitmap_make_y.Canvas.Pixels[i_make_y,j_make_y]);
-//   Nav4_matr[num,i_make_y+Kol_realiz,j_make_y]   :=getBvalue(bitmap_make_y.Canvas.Pixels[i_make_y,j_make_y]);
-//   Nav4_matr[num,i_make_y+2*Kol_realiz,j_make_y] :=getGvalue(bitmap_make_y.Canvas.Pixels[i_make_y,j_make_y]);
-   end;
-//bitmap_make_y.Destroy;
-end;
 
 
 
