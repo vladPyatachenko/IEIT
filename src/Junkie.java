@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.round;
@@ -10,8 +9,7 @@ public class Junkie {
     //Для створення звітів
     private static boolean Zvit_Radius_Center;
     private boolean Zvit_Delta;
-    String FT, FT_EXM;
-    String FileName;
+
 
     private static int Kol_class = 4;
     private static int Kol_oznak = 100;
@@ -25,39 +23,39 @@ public class Junkie {
     private static int[] Dopusk_niz = new int[Kol_oznak];
 
     // Для оптимізації контейнерів
-    static int[][] Center = new int[Kol_class][Kol_oznak];
-    static int[] Radius = new int[Kol_class];
-    static int[] no_rab_obl_Radius = new int[Kol_class];
-    static double[] pomylka_betta = new double[Kol_class];
-    static double[] dostovirn_D1 = new double[Kol_class];
-    static double[] max_KFE = new double[Kol_class];
+    private static int[][] Center = new int[Kol_class][Kol_oznak];
+    private static int[] Radius = new int[Kol_class];
+    private static int[] no_rab_obl_Radius = new int[Kol_class];
+    private static double[] pomylka_betta = new double[Kol_class];
+    private static double[] dostovirn_D1 = new double[Kol_class];
+    private static double[] max_KFE = new double[Kol_class];
     private static double[] no_rab_obl_pomylka_betta = new double[Kol_class];
-    static double[] no_rab_obl_dostovirn_D1 = new double[Kol_class];
-    static double[] no_rab_obl_max_KFE = new double[Kol_class];
+    private static double[] no_rab_obl_dostovirn_D1 = new double[Kol_class];
+    private static double[] no_rab_obl_max_KFE = new double[Kol_class];
 
-    static int[][][] Nav4_matr = new int[Kol_class][Kol_oznak][Kol_realiz];
-    static int[][][] Bin_nav4_matr = new int[Kol_class][Kol_oznak][Kol_realiz];
+    private static int[][][] Nav4_matr = new int[Kol_class][Kol_oznak][Kol_realiz];
+    private static int[][][] Bin_nav4_matr = new int[Kol_class][Kol_oznak][Kol_realiz];
 
-    static int[][] Kodova_vidstan = new int[2][Kol_realiz];
-    static int[] Class_sosed = new int[Kol_class];
-    static int[] do_soseda = new int[Kol_class];
+    private static int[][] Kodova_vidstan = new int[2][Kol_realiz];
+    private static int[] Class_sosed = new int[Kol_class];
+    private static int[] do_soseda = new int[Kol_class];
 
-    static double t_D1;
-    static double t_Betta;
+    private static double t_D1;
+    private static double t_Betta;
 
-    public static double getT_D1() {
+    private static double getT_D1() {
         return t_D1;
     }
 
-    public static void setT_D1(double t_d1) {
+    private static void setT_D1(double t_d1) {
         t_D1 = t_d1;
     }
 
-    public static double getT_Betta() {
+    private static double getT_Betta() {
         return t_Betta;
     }
 
-    public static void setT_Betta(double t_betta) {
+    private static void setT_Betta(double t_betta) {
         t_Betta = t_betta;
     }
 
@@ -140,7 +138,7 @@ public class Junkie {
         Readln;
         end.
         */}
-    static void Nav4(){
+    private static void Nav4(){
     double te, td1, tbetta;
     int t,ti,sum,kc;
         for (int Klass=0;Klass< Kol_class;Klass++){
@@ -185,7 +183,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         FileUtil fW = new FileUtil("REZ.txt");
   if(Zvit_Radius_Center){
    for (ti=0;ti<Kol_oznak;ti++) {
-       String out="\t" +Dopusk_ver[ti]+"\t"+ Dopusk_niz[ti]+"\n";
+       String out=Dopusk_ver[ti]+"\t"+ Dopusk_niz[ti]+"\t";
        try {
            fW.StreamOut(out);
        } catch (IOException e) {
@@ -193,6 +191,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
        }
 
    }
+
  for (int Klass=0;Klass<Kol_class;Klass++){
      FileUtil fWr = new FileUtil("REZ"+Klass+".txt");
 
@@ -219,7 +218,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
     td1=getT_D1();
     tbetta=getT_Betta();
       if(Zvit_Radius_Center){
-          String out = t+"\t"+te+"\t"+td1+"\t"+tbetta+"\t"+(1-td1)+"\t"+(1-tbetta)+"\t"+round(td1*Kol_realiz)+"\t"+round((1-td1)*Kol_realiz)+"\t"+round((1-tbetta)*Kol_realiz)+"\t"+round(tbetta*Kol_realiz);
+          String out = t+"\t"+te+"\t"+td1+"\t"+tbetta+"\t"+(1-td1)+"\t"+(1-tbetta)+"\t"+round(td1*Kol_realiz)+"\t"+round((1-td1)*Kol_realiz)+"\t"+round((1-tbetta)*Kol_realiz)+"\t"+round(tbetta*Kol_realiz)+"\n";
           try {
               fWr.StreamOut(out);
           } catch (IOException e) {
@@ -242,7 +241,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
       }
    }
    if(Zvit_Radius_Center){
-       String out1="Class "+Klass+" Em= "+max_KFE[Klass]+" do= "+Radius[Klass]+" dc= "+do_soseda[Klass]+" D1= "+dostovirn_D1[Klass]+" Betta= "+pomylka_betta[Klass]+"\n";
+       String out1="\n Class "+Klass+" Em= "+max_KFE[Klass]+" do= "+Radius[Klass]+" dc= "+do_soseda[Klass]+" D1= "+dostovirn_D1[Klass]+" Betta= "+pomylka_betta[Klass]+"\n";
        String out2="\n"+Klass+"\n";
        try {
            fWr.StreamOut(out1);
@@ -264,20 +263,19 @@ for (int Klass=0;Klass<Kol_class;Klass++){
 }
   }
     }
-    static void System_Dopuskov() {
+    private static void System_Dopuskov() {
         for (int Oznaka = 0; Oznaka < Kol_oznak; Oznaka++)
             Oznaka_Dopusk(Oznaka);
     }
 
-    static double KFE(int t) {
+    private static double KFE(int t) {
 
         double d1_b;
         double KFE;
 
         int    k1 = 0;
-        int    k2 = 0;
         int    k3 = 0;
-        int    k4 = 0;
+        int    k2, k4;
             for (int Realiz = 0; Realiz < Kol_realiz; Realiz++) {
                 if (Kodova_vidstan[0][Realiz] <= t) {
                     k1++;
@@ -299,7 +297,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         return KFE;
     }
 
-    static void Result_Nav4(int num, FileUtil wrf){
+    private static void Result_Nav4(int num, FileUtil wrf){
     String out="Class "+num+"\n BM["+num+"] \n";
         try {
             wrf.StreamOut(out);
@@ -325,7 +323,6 @@ for (int Klass=0;Klass<Kol_class;Klass++){
 
     for (int Oznaka=0;Oznaka<Kol_oznak;Oznaka++){
     String out2=Center[num][Oznaka]+"\n";
-    String rout="Para["+num+"]="+Class_sosed[num]+"\n"+"dc["+num+"]="+do_soseda[num]+"\n"+"d\tE\tD1\tBetta\tAlfa\tD2\tK1\tK2\tK3\tK4\n";
         try {
             wrf.StreamOut(out2);
         } catch (IOException e) {
@@ -341,7 +338,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
 
     }
 
-    static double  log_(double k1_log, double k2_log) {
+    private static double  log_(double k1_log, double k2_log) {
         double log_;
         if (k1_log == 0){ log_=0;}
 
@@ -350,17 +347,19 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         return log_;
     }
 
-    static void Oznaka_Dopusk(int il) {
+    private static void Oznaka_Dopusk(int il) {
        int sum = 0;
        for (int Realiz=0;Realiz< Kol_realiz;Realiz++) {
            sum=sum + Nav4_matr[tclass[il]][il][Realiz];
-           sum=round(sum / Kol_realiz);
+         //  System.out.println("Nav4: "+Nav4_matr[tclass[il]][il][Realiz]+" sum: "+sum);
        }
-       Dopusk_ver[il]=sum + delta[il];
+        sum=round(sum / Kol_realiz);
+
+        Dopusk_ver[il]=sum + delta[il];
        Dopusk_niz[il]=sum - delta[il];
 
    }
-    static void Parallel_System_Dopusk(int delta_max){
+    private static void Parallel_System_Dopusk(int delta_max){
         double e0;
         int i_ds, j_ds;
         boolean a;
@@ -372,7 +371,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         j_ds=0;
         e0=0;
         for (i_ds=0; i_ds < delta_max; i_ds++){
-            if ((i_ds / 20)==(int)(i_ds / 20)){
+            if ((i_ds / 20)== i_ds / 20){
                 out=i_ds+"-";
                 try {
                     fileWriter.StreamOut(out);
@@ -388,14 +387,14 @@ for (int Klass=0;Klass<Kol_class;Klass++){
                 a=true;
                 for (my_i=0;my_i< Kol_class; my_i++){
                     if(Radius[my_i] == 0) {a=false;}
-                    out= (Dopusk_ver[1] - Dopusk_niz[1])/2+"\t"+a+"\n";
+                    out= (Dopusk_ver[0] - Dopusk_niz[0])/2+"\t"+a+"\n";
                     try {
                         fileWriter.StreamOut(out);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    for (my_i=0; my_i< Kol_class; my_i++) {
-                        out="\t"+max_KFE[my_i]+"\t"+Radius[my_i]+"\t"+dostovirn_D1[my_i]+"\t"+pomylka_betta[my_i]+"\t"+ Class_sosed[my_i]+"\t"+do_soseda[my_i];
+                for (my_i=0; my_i< Kol_class; my_i++) {
+                        out="\t"+max_KFE[my_i]+"\t"+Radius[my_i]+"\t"+dostovirn_D1[my_i]+"\t"+pomylka_betta[my_i]+"\t"+ Class_sosed[my_i]+"\t"+do_soseda[my_i]+"\n";
                         try {
                             fileWriter.StreamOut(out);
                         } catch (IOException e) {
@@ -422,24 +421,24 @@ for (int Klass=0;Klass<Kol_class;Klass++){
 
     public static void main(String args[]) throws IOException{
        Junkie a = new Junkie();
-        a.Zvit_Radius_Center=true;
+        Zvit_Radius_Center=true;
         a.Zvit_Delta=true;
-        for(int i=0; i< a.Kol_class;i++){
+        for(int i=0; i< Kol_class;i++){
             FileUtil reader=new FileUtil("Matrix"+i+".txt");
-            int[][]array= reader.ReadFile(a.Kol_realiz);
-            for(int o=0; o< a.Kol_oznak;o++){
-                a.tclass[o]=0;
-                for(int r=0; r< a.Kol_realiz;r++){
-                a.Nav4_matr[i][o][r]=array[o][r];
+            int[][]array= reader.ReadFile(Kol_realiz);
+            for(int o=0; o< Kol_oznak;o++){
+                tclass[o]=0;
+                for(int r=0; r< Kol_realiz;r++){
+                Nav4_matr[i][o][r]=array[o][r];
             }
             }
         }
 
-        //a.Zvit_Radius_Center=false;
-        Parallel_System_Dopusk(10);
-        //a.Zvit_Radius_Center=true;
-        //a.System_Dopuskov();
-        //a.Nav4();
+        a.Zvit_Radius_Center=false;
+        Parallel_System_Dopusk(20);
+        a.Zvit_Radius_Center=true;
+        a.System_Dopuskov();
+        a.Nav4();
     }
 }
 

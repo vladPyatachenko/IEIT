@@ -1,6 +1,6 @@
 import java.io.IOException;
 
-public class Parallel_System_Dopusk extends MatrixUtil {
+public class Parallel_System_Dopusk{
     double e0;
     int i_ds, j_ds;
     boolean a;
@@ -9,12 +9,8 @@ public class Parallel_System_Dopusk extends MatrixUtil {
     double sum_real, em_avg;
     int ff_x;
     String out;
-
-    public Parallel_System_Dopusk(int kol_class, int size) {
-        super(kol_class, size);
-    }
-
-    void Parallel_System_Dopusk(int delta_max, int size) throws IOException {
+/*
+    void Parallel_System_Dopusk(int delta_max) throws IOException {
 
         FileUtil fileWriter = new FileUtil("E_delta(параллельный)X.txt");
         j_ds=0;
@@ -51,5 +47,5 @@ public class Parallel_System_Dopusk extends MatrixUtil {
    //     System_Dopuskov;
     //    Nav4;
     }
-}
+}*/
 }

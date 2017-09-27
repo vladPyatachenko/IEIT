@@ -13,7 +13,7 @@ class FileUtil {
     private String path = "F:\\IEIT\\matrix\\";
     FileUtil(String name) {
         this.name = name;
-    }
+            }
 
         void WriteFile(int[][] array) throws IOException {
         FileWriter filewriter = new FileWriter(new File(path+name));
@@ -42,7 +42,7 @@ class FileUtil {
 
             file.skipBytes((int)file.length()); //skip to the end of the file
 
-            file.writeBytes(out+"\n");
+            file.writeBytes(out);
 
             file.close();
 
