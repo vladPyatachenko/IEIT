@@ -19,10 +19,11 @@ public class Junkie {
 
     //Для оптимізації системи допусків
     private static int[] delta = new int[Kol_oznak];
-    private static int[] tclass = new int[Kol_class];
+    private static int[] tclass = new int[Kol_oznak];
     int tdelta;
     private static int[] Dopusk_ver = new int[Kol_oznak];
     private static int[] Dopusk_niz = new int[Kol_oznak];
+
     // Для оптимізації контейнерів
     static int[][] Center = new int[Kol_class][Kol_oznak];
     static int[] Radius = new int[Kol_class];
@@ -33,27 +34,16 @@ public class Junkie {
     private static double[] no_rab_obl_pomylka_betta = new double[Kol_class];
     static double[] no_rab_obl_dostovirn_D1 = new double[Kol_class];
     static double[] no_rab_obl_max_KFE = new double[Kol_class];
+
     static int[][][] Nav4_matr = new int[Kol_class][Kol_oznak][Kol_realiz];
     static int[][][] Bin_nav4_matr = new int[Kol_class][Kol_oznak][Kol_realiz];
+
     static int[][] Kodova_vidstan = new int[2][Kol_realiz];
     static int[] Class_sosed = new int[Kol_class];
     static int[] do_soseda = new int[Kol_class];
-    //Лічильники
-    static int Oznaka;
-    static int Realiz;
-    static int Klass;
-    int kl;
-    int t;
+
     static double t_D1;
     static double t_Betta;
-    double e0;
-    int i_ds, j_ds;
-    boolean a;
-    int my_i, my_j, my_ji, delta_i;
-    //file f1, f2, f3;
-    double sum_real, em_avg;
-    int ff_x;
-    String out;
 
     public static double getT_D1() {
         return t_D1;
@@ -72,8 +62,7 @@ public class Junkie {
     }
 
 
-
-    /*
+{  /*
         Procedure Poslidov_System_Dopusk(MY_k:integer;delta_max:integer);
         var
           e0:real;
@@ -150,13 +139,13 @@ public class Junkie {
         Writeln('TEACH..Done');
         Readln;
         end.
-        */
+        */}
     static void Nav4(){
     double te, td1, tbetta;
     int t,ti,sum,kc;
-        for (Klass=0;Klass< Kol_class;Klass++){
-            for (Oznaka=0;Oznaka<Kol_oznak;Oznaka++){
-            for (Realiz=0;Realiz<Kol_realiz;Realiz++){
+        for (int Klass=0;Klass< Kol_class;Klass++){
+            for (int Oznaka=0;Oznaka<Kol_oznak;Oznaka++){
+            for (int Realiz=0;Realiz<Kol_realiz;Realiz++){
             if((Nav4_matr[Klass][Oznaka][Realiz]>=Dopusk_niz[Oznaka])&&
                     (Nav4_matr[Klass][Oznaka][Realiz]<=Dopusk_ver[Oznaka])){
                 Bin_nav4_matr[Klass][Oznaka][Realiz]=1;}
@@ -165,10 +154,10 @@ public class Junkie {
             }
         }
 //формируем єталонные вектора
-for (Klass=0;Klass<Kol_class;Klass++){
-            for (Oznaka=0;Oznaka< Kol_oznak;Oznaka++){
+for (int Klass=0;Klass<Kol_class;Klass++){
+            for (int Oznaka=0;Oznaka< Kol_oznak;Oznaka++){
                 sum=0;
-  for (Realiz=0;Realiz<Kol_realiz;Realiz++){
+  for (int Realiz=0;Realiz<Kol_realiz;Realiz++){
     sum=sum+Bin_nav4_matr[Klass][Oznaka][Realiz];
         if((sum/Kol_realiz)>=0.5){
         Center[Klass][Oznaka]=1;}
@@ -177,13 +166,13 @@ for (Klass=0;Klass<Kol_class;Klass++){
       }
    }
     // поиск ближайшего класса
-  for (Klass=0;Klass<Kol_class;Klass++){
+  for (int Klass=0;Klass<Kol_class;Klass++){
     Class_sosed[Klass]=1;
     do_soseda[Klass]=Kol_oznak;
  for (kc=0;kc<Kol_class;kc++){
     if(Klass!= kc){
     sum=0;
-    for (Oznaka=0;Oznaka<Kol_oznak;Oznaka++) {
+    for (int Oznaka=0;Oznaka<Kol_oznak;Oznaka++) {
         sum = sum + abs(Center[Klass][Oznaka] - Center[kc][Oznaka]);
         if (sum <= do_soseda[Klass]) {
             Class_sosed[Klass]=kc;
@@ -193,32 +182,34 @@ for (Klass=0;Klass<Kol_class;Klass++){
      }
  }
 }
-//    AssignFile(FT_EXM,'REZ.TXT');
-
-  //  Rewrite(FT_EXM);
+        FileUtil fW = new FileUtil("REZ.txt");
   if(Zvit_Radius_Center){
    for (ti=0;ti<Kol_oznak;ti++) {
-     //  Write(FT_EXM, Dopusk_ver[ti], ' ', Dopusk_niz[ti], chr(9));
-     //Writeln(FT_EXM);
+       String out="\t" +Dopusk_ver[ti]+"\t"+ Dopusk_niz[ti]+"\n";
+       try {
+           fW.StreamOut(out);
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
 
    }
- for (Klass=0;Klass<Kol_class;Klass++){
- if(Zvit_Radius_Center) {
-    // AssignFile(FT, 'REZ' + inttostr(Klass) + '.TXT');
-    // Rewrite(FT);
-     Result_Nav4(Klass);
+ for (int Klass=0;Klass<Kol_class;Klass++){
+     FileUtil fWr = new FileUtil("REZ"+Klass+".txt");
+
+     if(Zvit_Radius_Center) {
+     Result_Nav4(Klass,fWr);
  }
  max_KFE[Klass]=0;
  no_rab_obl_max_KFE[Klass]=0;
  Radius[Klass]=0;
 
-   for (Realiz=0;Realiz < Kol_realiz;Realiz++) {
+   for (int Realiz=0;Realiz < Kol_realiz;Realiz++) {
+       Kodova_vidstan[0][Realiz] = 0;
        Kodova_vidstan[1][Realiz] = 0;
-       Kodova_vidstan[2][Realiz] = 0;
-       for (Oznaka = 0; Oznaka < Kol_oznak; Oznaka++) {
-           Kodova_vidstan[1][Realiz] = Kodova_vidstan[1][Realiz] +
+       for (int Oznaka = 0; Oznaka < Kol_oznak; Oznaka++) {
+           Kodova_vidstan[0][Realiz] = Kodova_vidstan[0][Realiz] +
                    abs(Center[Klass][Oznaka] - Bin_nav4_matr[Klass][Oznaka][Realiz]);
-           Kodova_vidstan[2][Realiz] = Kodova_vidstan[2][Realiz] +
+           Kodova_vidstan[1][Realiz] = Kodova_vidstan[1][Realiz] +
                    abs(Center[Klass][Oznaka] - Bin_nav4_matr[Class_sosed[Klass]][Oznaka][Realiz]);
 
        }
@@ -228,24 +219,12 @@ for (Klass=0;Klass<Kol_class;Klass++){
     td1=getT_D1();
     tbetta=getT_Betta();
       if(Zvit_Radius_Center){
-          /*
-    Writeln(FT, t, chr(9),te:0:5,
-
-    chr(9),td1:0:3,
-
-    chr(9),tbetta:0:3,
-
-    chr(9),1-td1:0:3,
-
-    chr(9),1-tbetta:0:3,
-
-    chr(9),round(td1*Kol_realiz),
-
-    chr(9),round((1-td1)*Kol_realiz),
-
-    chr(9),round((1-tbetta)*Kol_realiz),
-
-    chr(9),round(tbetta*Kol_realiz));*/
+          String out = t+"\t"+te+"\t"+td1+"\t"+tbetta+"\t"+(1-td1)+"\t"+(1-tbetta)+"\t"+round(td1*Kol_realiz)+"\t"+round((1-td1)*Kol_realiz)+"\t"+round((1-tbetta)*Kol_realiz)+"\t"+round(tbetta*Kol_realiz);
+          try {
+              fWr.StreamOut(out);
+          } catch (IOException e) {
+              e.printStackTrace();
+          }
       }
       if (te>no_rab_obl_max_KFE[Klass]) {
           no_rab_obl_max_KFE[Klass] = te;
@@ -263,30 +242,24 @@ for (Klass=0;Klass<Kol_class;Klass++){
       }
    }
    if(Zvit_Radius_Center){
-  /*  Writeln(FT,'Class ',Klass, chr(9),'Em= ',max_KFE[Klass]:0:5,
-
-    chr(9),'do= ',Radius[Klass],
-
-    chr(9),'dc=',do_soseda[Klass],
-
-    chr(9),'D1= ',dostovirn_D1[Klass]:0:2,
-
-    chr(9),'Betta= ',pomylka_betta[Klass]:0:2);
-
-    Writeln(FT_EXM, Klass);
-   */
+       String out1="Class "+Klass+" Em= "+max_KFE[Klass]+" do= "+Radius[Klass]+" dc= "+do_soseda[Klass]+" D1= "+dostovirn_D1[Klass]+" Betta= "+pomylka_betta[Klass]+"\n";
+       String out2="\n"+Klass+"\n";
+       try {
+           fWr.StreamOut(out1);
+           fW.StreamOut(out2);
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
    for(ti=0;ti< Kol_oznak;ti++){
-   /* Write(FT_EXM, Center[Klass, ti],' ');
+       String out3=Center[Klass][ti]+"\t"+Radius[Klass]+"\t";
+       try {
+           fW.StreamOut(out3);
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
 
-    Writeln(FT_EXM);
-
-    Writeln(FT_EXM, Radius[Klass]);
-
-    closefile(FT);
-*/
 }
 }
-  //  closefile(FT_EXM);
 
 }
   }
@@ -298,19 +271,18 @@ for (Klass=0;Klass<Kol_class;Klass++){
 
     static double KFE(int t) {
 
-        int k1, k2, k3, k4;
         double d1_b;
         double KFE;
 
-            k1 = 0;
-            k2 = 0;
-            k3 = 0;
-            k4 = 0;
-            for (Realiz = 0; Realiz < Kol_realiz; Realiz++) {
-                if (Kodova_vidstan[1][Realiz] <= t) {
+        int    k1 = 0;
+        int    k2 = 0;
+        int    k3 = 0;
+        int    k4 = 0;
+            for (int Realiz = 0; Realiz < Kol_realiz; Realiz++) {
+                if (Kodova_vidstan[0][Realiz] <= t) {
                     k1++;
                 }
-                if (Kodova_vidstan[2][Realiz] <= t) {
+                if (Kodova_vidstan[1][Realiz] <= t) {
                     k3++;
                 }
             }
@@ -327,23 +299,46 @@ for (Klass=0;Klass<Kol_class;Klass++){
         return KFE;
     }
 
-    static void Result_Nav4(int num){
-   // Writeln(FT,'Class ',num);
-   // Writeln(FT,'BM[',num,']');
-    for (Oznaka=0;Oznaka<Kol_oznak;Oznaka++){
-    for (Realiz=0;Realiz<Kol_realiz;Realiz++) {
-        //Write(FT,Bin_nav4_matr[num,Oznaka,Realiz],chr(9));
-        //Writeln(FT);
+    static void Result_Nav4(int num, FileUtil wrf){
+    String out="Class "+num+"\n BM["+num+"] \n";
+        try {
+            wrf.StreamOut(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    for (int Oznaka=0;Oznaka<Kol_oznak;Oznaka++){
+    for (int Realiz=0;Realiz<Kol_realiz;Realiz++) {
+        String out0=Bin_nav4_matr[num][Oznaka][Realiz]+" ";
+        try {
+            wrf.StreamOut(out0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     }
-    //Writeln(FT,'EV[',num,']');
-    for (Oznaka=0;Oznaka<Kol_oznak;Oznaka++){
-    //Write(FT,Center[num,Oznaka],chr(9));
-    //Writeln(FT);
-    //Writeln(FT,'PARA[',num,']=',Class_sosed[num]);
-    //Writeln(FT,'dc[',num,']=',do_soseda[num]);
-    //Writeln(FT,'d',chr(9),'E',chr(9),'D1',chr(9),'Betta',chr(9),'Alfa',chr(9),'D2',chr(9),'K1',chr(9),'K2',chr(9),'K3',chr(9),'K4');
+    String out1="\nEV["+num+"]\n";
+        try {
+            wrf.StreamOut(out1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    for (int Oznaka=0;Oznaka<Kol_oznak;Oznaka++){
+    String out2=Center[num][Oznaka]+"\n";
+    String rout="Para["+num+"]="+Class_sosed[num]+"\n"+"dc["+num+"]="+do_soseda[num]+"\n"+"d\tE\tD1\tBetta\tAlfa\tD2\tK1\tK2\tK3\tK4\n";
+        try {
+            wrf.StreamOut(out2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+        String rout="Para["+num+"]="+Class_sosed[num]+"\n"+"dc["+num+"]="+do_soseda[num]+"\n"+"d\tE\tD1\tBetta\tAlfa\tD2\tK1\tK2\tK3\tK4\n";
+        try {
+            wrf.StreamOut(rout);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     static double  log_(double k1_log, double k2_log) {
@@ -369,10 +364,8 @@ for (Klass=0;Klass<Kol_class;Klass++){
         double e0;
         int i_ds, j_ds;
         boolean a;
-        int my_i, my_j, my_ji, delta_i;
-        //file f1, f2, f3;
-        double sum_real, em_avg;
-        int ff_x;
+        int my_i, delta_i;
+        double em_avg;
         String out;
 
         FileUtil fileWriter = new FileUtil("E_delta(параллельный)X.txt");
@@ -395,14 +388,14 @@ for (Klass=0;Klass<Kol_class;Klass++){
                 a=true;
                 for (my_i=0;my_i< Kol_class; my_i++){
                     if(Radius[my_i] == 0) {a=false;}
-                    out= (Dopusk_ver[1] - Dopusk_niz[1])/2+" "+a+"\n";
+                    out= (Dopusk_ver[1] - Dopusk_niz[1])/2+"\t"+a+"\n";
                     try {
                         fileWriter.StreamOut(out);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     for (my_i=0; my_i< Kol_class; my_i++) {
-                        out=" "+max_KFE[my_i]+" "+Radius[my_i]+" "+dostovirn_D1[my_i]+" "+pomylka_betta[my_i]+" "+ Class_sosed[my_i]+" "+do_soseda[my_i];
+                        out="\t"+max_KFE[my_i]+"\t"+Radius[my_i]+"\t"+dostovirn_D1[my_i]+"\t"+pomylka_betta[my_i]+"\t"+ Class_sosed[my_i]+"\t"+do_soseda[my_i];
                         try {
                             fileWriter.StreamOut(out);
                         } catch (IOException e) {
@@ -431,23 +424,22 @@ for (Klass=0;Klass<Kol_class;Klass++){
        Junkie a = new Junkie();
         a.Zvit_Radius_Center=true;
         a.Zvit_Delta=true;
-        //ArrayList<int[][]> matrix = new ArrayList();
         for(int i=0; i< a.Kol_class;i++){
             FileUtil reader=new FileUtil("Matrix"+i+".txt");
             int[][]array= reader.ReadFile(a.Kol_realiz);
-            //matrix.add(array);
             for(int o=0; o< a.Kol_oznak;o++){
+                a.tclass[o]=0;
                 for(int r=0; r< a.Kol_realiz;r++){
                 a.Nav4_matr[i][o][r]=array[o][r];
             }
             }
         }
 
-        a.Zvit_Radius_Center=false;
-        Parallel_System_Dopusk(200);
-        a.Zvit_Radius_Center=true;
-        a.System_Dopuskov();
-        a.Nav4();
+        //a.Zvit_Radius_Center=false;
+        Parallel_System_Dopusk(10);
+        //a.Zvit_Radius_Center=true;
+        //a.System_Dopuskov();
+        //a.Nav4();
     }
 }
 
