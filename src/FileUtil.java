@@ -10,7 +10,7 @@ class FileUtil {
      * and reading from files
      */
     private String name;
-    private String path = "F:\\IEIT\\matrix\\";
+    private static String path = "F:\\IEIT\\matrix\\";
     FileUtil(String name) {
         this.name = name;
             }
@@ -23,7 +23,12 @@ class FileUtil {
         filewriter.flush();}
     }
     }
-
+public static void checkdel(String name){
+        File f= new File(path+name);
+        if(f.length()!=0){
+            f.delete();
+        }
+}
     int[][] ReadFile(int size) throws IOException {
         int[][] array = new int[size][size];
         Scanner scanner = new Scanner(new File(path + name));

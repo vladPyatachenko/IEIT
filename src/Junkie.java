@@ -12,8 +12,8 @@ public class Junkie {
 
 
     private static int Kol_class = 4;
-    private static int Kol_oznak = 100;
-    private static int Kol_realiz = 100;
+    private static int Kol_oznak = 50;
+    private static int Kol_realiz = 50;
 
     //Для оптимізації системи допусків
     private static int[] delta = new int[Kol_oznak];
@@ -141,6 +141,7 @@ public class Junkie {
     private static void Nav4(){
     double te, td1, tbetta;
     int t,ti,sum,kc;
+
         for (int Klass=0;Klass< Kol_class;Klass++){
             for (int Oznaka=0;Oznaka<Kol_oznak;Oznaka++){
             for (int Realiz=0;Realiz<Kol_realiz;Realiz++){
@@ -151,6 +152,7 @@ public class Junkie {
             }
             }
         }
+
 //формируем єталонные вектора
 for (int Klass=0;Klass<Kol_class;Klass++){
             for (int Oznaka=0;Oznaka< Kol_oznak;Oznaka++){
@@ -163,6 +165,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         }
       }
    }
+
     // поиск ближайшего класса
   for (int Klass=0;Klass<Kol_class;Klass++){
     Class_sosed[Klass]=1;
@@ -180,7 +183,10 @@ for (int Klass=0;Klass<Kol_class;Klass++){
      }
  }
 }
+//удалим файл rez.txt, если он уже существует и чем-то заполнен и создадим пустой
+        FileUtil.checkdel("REZ.txt");
         FileUtil fW = new FileUtil("REZ.txt");
+
   if(Zvit_Radius_Center){
    for (ti=0;ti<Kol_oznak;ti++) {
        String out=Dopusk_ver[ti]+"\t"+ Dopusk_niz[ti]+"\t";
@@ -193,6 +199,8 @@ for (int Klass=0;Klass<Kol_class;Klass++){
    }
 
  for (int Klass=0;Klass<Kol_class;Klass++){
+     //удалим файл Rez.number.txt, если он уже существует и чем-то заполнен и создадим пустой
+     FileUtil.checkdel("REZ"+Klass+".txt");
      FileUtil fWr = new FileUtil("REZ"+Klass+".txt");
 
      if(Zvit_Radius_Center) {
@@ -291,8 +299,8 @@ for (int Klass=0;Klass<Kol_class;Klass++){
             d1_b = t_D1 - t_Betta;
             setT_Betta(t_Betta);
             setT_D1(t_D1);
-            //KFE:=d1_b*ln((1+d1_b+0.1)/(1-d1_b+0.1))/ln(2);
-            KFE = 1 + 0.5 * (log_(k3, k1) + log_(k4, k2) + log_(k2, k4) + log_(k1, k3));
+            KFE=d1_b*Math.log((1+d1_b+0.1)/(1-d1_b+0.1))/Math.log(2);
+           // KFE = 1 + 0.5 * (log_(k3, k1) + log_(k4, k2) + log_(k2, k4) + log_(k1, k3));
 
         return KFE;
     }
@@ -355,10 +363,10 @@ for (int Klass=0;Klass<Kol_class;Klass++){
        }
         sum=round(sum / Kol_realiz);
 
-        Dopusk_ver[il]=sum + delta[il];
+       Dopusk_ver[il]=sum + delta[il];
        Dopusk_niz[il]=sum - delta[il];
-
    }
+
     private static void Parallel_System_Dopusk(int delta_max){
         double e0;
         int i_ds, j_ds;
@@ -366,7 +374,8 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         int my_i, delta_i;
         double em_avg;
         String out;
-
+//удалим файл E_delta(параллельный)X.txt, если он уже существует и чем-то заполнен и создадим пустой
+        FileUtil.checkdel("E_delta(параллельный)X.txt");
         FileUtil fileWriter = new FileUtil("E_delta(параллельный)X.txt");
         j_ds=0;
         e0=0;
@@ -435,9 +444,9 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         }
 
         a.Zvit_Radius_Center=false;
-        Parallel_System_Dopusk(20);
+        Parallel_System_Dopusk(15);
         a.Zvit_Radius_Center=true;
-        a.System_Dopuskov();
+       // a.System_Dopuskov();
         a.Nav4();
     }
 }
