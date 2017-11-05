@@ -1,4 +1,7 @@
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.round;
@@ -433,8 +436,11 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         Zvit_Radius_Center=true;
         a.Zvit_Delta=true;
         for(int i=0; i< Kol_class;i++){
-            FileUtil reader=new FileUtil("Matrix"+i+".txt");
-            int[][]array= reader.ReadFile(Kol_realiz);
+            //FileUtil reader=new FileUtil("Matrix"+i+".txt");
+            String path ="F:\\IEIT\\classes\\"+i+"\\"+i+"1.png";
+            BufferedImage image= new BufferedImage(path);
+            //int[][]array= reader.ReadFile(Kol_realiz);
+            int[][]array= ImgModule.imageToMatrix(image);
             for(int o=0; o< Kol_oznak;o++){
                 tclass[o]=0;
                 for(int r=0; r< Kol_realiz;r++){
@@ -448,6 +454,31 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         a.Zvit_Radius_Center=true;
        // a.System_Dopuskov();
         a.Nav4();
+
+        BufferedImage input = ImgModule.loadImage("G:\\magistr\\project\\recognition\\recogn\\src\\origin.png");
+        Exam examenator = new Exam();
+        ArrayList<ImOperator> imgs = ImgModule.imageSplit(input, 20);
+        for (ImOperator img : imgs)
+        {
+            String nm;
+            ClassRec recognized = examenator.recognize(img.getEtalonVector());
+            if(recognized != null)
+            {
+                nm = recognized.getName();
+            }
+            else
+            {
+                nm = "0";
+            }
+
+            ImgModule.drawBorder(img.getSurfaceImage(), Color.BLACK);
+            ImgModule.drawText(img.getSurfaceImage(), nm, Color.BLACK, 0, 20);
+        }
+
+        BufferedImage output = ImgModule.imageBuild(imgs, input.getWidth(), input.getHeight());
+        ImgModule.imageWrite(output, "G:\\magistr\\project\\recognition\\recogn\\src\\output.png");
+
+    }
     }
 }
 

@@ -10,7 +10,9 @@ class FileUtil {
      * and reading from files
      */
     private String name;
-    private static String path = "F:\\IEIT\\matrix\\";
+    //private static String path = "F:\\IEIT\\matrix\\";
+    private static String path = "F:\\IEIT\\results\\";
+    private static String classpath = "F:\\IEIT\\classes\\";
     FileUtil(String name) {
         this.name = name;
             }
