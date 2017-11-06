@@ -167,7 +167,6 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         else {Center[Klass][Oznaka]=0;}
         }
       }
-      Exam.ExamData c = new Exam.ExamData(String.valueOf(Klass),Center);
    }
 
     // поиск ближайшего класса
@@ -225,6 +224,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
 
        }
    }
+
    for (t=0;t<Kol_oznak;t++){
     te=KFE(t);
     td1=getT_D1();
@@ -252,6 +252,9 @@ for (int Klass=0;Klass<Kol_class;Klass++){
       }
       }
    }
+   Exam.ExamData exm= new Exam.ExamData(String.valueOf(Klass),Center[Klass],Radius[Klass]);
+   Exam.addExamClass(exm);
+
    if(Zvit_Radius_Center){
        String out1="\n Class "+Klass+" Em= "+max_KFE[Klass]+" do= "+Radius[Klass]+" dc= "+do_soseda[Klass]+" D1= "+dostovirn_D1[Klass]+" Betta= "+pomylka_betta[Klass]+"\n";
        String out2="\n"+Klass+"\n";
@@ -452,7 +455,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         }
 
         a.Zvit_Radius_Center=false;
-        Parallel_System_Dopusk(50);
+        Parallel_System_Dopusk(200);
         a.Zvit_Radius_Center=true;
         //a.System_Dopuskov();
         a.Nav4();
@@ -460,10 +463,10 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         BufferedImage input = ImgModule.loadImage("F:\\IEIT\\input\\input.png");
         Exam examenator = new Exam();
         ArrayList<ImOperator> imgs = ImgModule.imageSplit(input, 100);
-       /* for (ImOperator img : imgs)
+        for (ImOperator img : imgs)
         {
             String nm;
-            Exam.ExamData recognized = examenator.recognize(ClassRec.getEtalonVector());
+            Exam.ExamData recognized = examenator.recognize(Exam.ExamData.getVector());
             if(recognized != null)
             {
                 nm = recognized.getName();
@@ -475,7 +478,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
 
             ImgModule.drawBorder(img.getSurfaceImage(), Color.BLACK);
             ImgModule.drawText(img.getSurfaceImage(), nm, Color.BLACK, 0, 20);
-        }*/
+        }
 
         BufferedImage output = ImgModule.imageBuild(imgs, input.getWidth(), input.getHeight());
         ImgModule.imageWrite(output, "F:\\IEIT\\input\\output.png");

@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 public class Exam {
 
-        private ArrayList<ExamData> EXAM_CLASSES = new ArrayList<>();
+        private static ArrayList<ExamData> EXAM_CLASSES = new ArrayList<>();
 
-        public void addExamClass(ExamData c)
+        public static void addExamClass(ExamData c)
         {
             EXAM_CLASSES.add(c);
         }
@@ -35,29 +35,25 @@ public class Exam {
 
         public static class ExamData extends Exam{
             String name;
-            int[][] array;
-            int[] vector;
+            static int[] vector;
             int radius;
 
             public ExamData(String name, int[][] array) {
+
+            }
+
+            public ExamData(String name, int[] vector, int radius) {
                 this.name = name;
-                this.array = array;
+                this.vector = vector;
+                this.radius=radius;
             }
 
-            void refArray(int[][] array){
-                for(int i=0;i<array.length;i++){
-                    vector[i]=array[Integer.parseInt(getName())][i];
-                }
-
-                setVector(vector);
-            }
 
             public String getName() {
                 return name;
             }
 
-            public int[] getVector() {
-                refArray(getArray());
+            public static int[] getVector() {
                 return vector;
             }
 
@@ -76,14 +72,6 @@ public class Exam {
 
             public void setName(String name) {
                 this.name = name;
-            }
-
-            public int[][] getArray() {
-                return array;
-            }
-
-            public void setArray(int[][] array) {
-                this.array = array;
             }
         }
 }
