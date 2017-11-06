@@ -2,22 +2,22 @@ import java.util.ArrayList;
 
 public class Exam {
 
-        private ArrayList<ClassRec> EXAM_CLASSES = new ArrayList<>();
+        private ArrayList<ExamData> EXAM_CLASSES = new ArrayList<>();
 
-        public void addExamClass(ClassRec c)
+        public void addExamClass(ExamData c)
         {
             EXAM_CLASSES.add(c);
         }
 
-        public ClassRec recognize(int [] realization, ArrayList<ClassRec> examClasses)
+        public ExamData recognize(int [] realization, ArrayList<ExamData> examClasses)
         {
             double minDistance = Integer.MAX_VALUE;
-            ClassRec recognizedClass = null;
+            ExamData recognizedClass = null;
 
-            for (ClassRec examinee : examClasses)
+            for (ExamData examinee : examClasses)
             {
-                double dst = ClassRec.calculateDistance(realization, examinee.getEtalonVector());
-                if (dst < minDistance && ClassRec.calculateDistance(realization, examinee.getEtalonVector())<examinee.getRadius())
+                double dst = ClassRec.calculateDistance(realization, examinee.getVector());
+                if (dst < minDistance && ClassRec.calculateDistance(realization, examinee.getVector())<examinee.getRadius())
                 {
                     minDistance = dst;
                     recognizedClass = examinee;
@@ -27,31 +27,64 @@ public class Exam {
             return recognizedClass;
         }
 
-        public ClassRec recognize(int [] realization)
+        public ExamData recognize(int[] realization)
         {
             return recognize(realization, EXAM_CLASSES);
         }
 
-        public static class ExamPair
-        {
-            int[] vector;
-            ClassRec expectedClass;
 
-            public ExamPair(int [] vector, ClassRec expectedClass)
-            {
-                this.vector = vector;
-                this.expectedClass = expectedClass;
+        public static class ExamData extends Exam{
+            String name;
+            int[][] array;
+            int[] vector;
+            int radius;
+
+            public ExamData(String name, int[][] array) {
+                this.name = name;
+                this.array = array;
             }
 
-            int[] getVector()
-            {
+            void refArray(int[][] array){
+                for(int i=0;i<array.length;i++){
+                    vector[i]=array[Integer.parseInt(getName())][i];
+                }
+
+                setVector(vector);
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public int[] getVector() {
+                refArray(getArray());
                 return vector;
             }
 
-            ClassRec getExpectedClass()
-            {
-                return expectedClass;
+            public void setVector(int[] vector) {
+                this.vector = vector;
+            }
+
+            public void setRadius(int radius) {
+                this.radius = radius;
+            }
+
+            public int getRadius() {
+                return radius;
+
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public int[][] getArray() {
+                return array;
+            }
+
+            public void setArray(int[][] array) {
+                this.array = array;
             }
         }
-    }
 }
+

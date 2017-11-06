@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class ImgModule {
 
+
     static BufferedImage loadImage(String path) throws IOException
     {
         return ImageIO.read(new File(path));

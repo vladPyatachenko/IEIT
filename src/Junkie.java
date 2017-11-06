@@ -15,8 +15,8 @@ public class Junkie {
 
 
     private static int Kol_class = 4;
-    private static int Kol_oznak = 50;
-    private static int Kol_realiz = 50;
+    private static int Kol_oznak = 100;
+    private static int Kol_realiz = 100;
 
     //Для оптимізації системи допусків
     private static int[] delta = new int[Kol_oznak];
@@ -167,6 +167,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         else {Center[Klass][Oznaka]=0;}
         }
       }
+      Exam.ExamData c = new Exam.ExamData(String.valueOf(Klass),Center);
    }
 
     // поиск ближайшего класса
@@ -274,6 +275,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
 }
   }
     }
+
     private static void System_Dopuskov() {
         for (int Oznaka = 0; Oznaka < Kol_oznak; Oznaka++)
             Oznaka_Dopusk(Oznaka);
@@ -384,7 +386,7 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         e0=0;
         for (i_ds=0; i_ds < delta_max; i_ds++){
             if ((i_ds / 20)== i_ds / 20){
-                out=i_ds+"-";
+                out="\n"+i_ds+"-";
                 try {
                     fileWriter.StreamOut(out);
                 } catch (IOException e) {
@@ -399,14 +401,14 @@ for (int Klass=0;Klass<Kol_class;Klass++){
                 a=true;
                 for (my_i=0;my_i< Kol_class; my_i++){
                     if(Radius[my_i] == 0) {a=false;}
-                    out= (Dopusk_ver[0] - Dopusk_niz[0])/2+"\t"+a+"\n";
+                    out= (Dopusk_ver[0] - Dopusk_niz[0])/2+"\t"+a+"\t";
                     try {
                         fileWriter.StreamOut(out);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 for (my_i=0; my_i< Kol_class; my_i++) {
-                        out="\t"+max_KFE[my_i]+"\t"+Radius[my_i]+"\t"+dostovirn_D1[my_i]+"\t"+pomylka_betta[my_i]+"\t"+ Class_sosed[my_i]+"\t"+do_soseda[my_i]+"\n";
+                        out="\t"+max_KFE[my_i]+"\t"+Radius[my_i]+"\t"+dostovirn_D1[my_i]+"\t"+pomylka_betta[my_i]+"\t"+ Class_sosed[my_i]+"\t"+do_soseda[my_i]+"\t";
                         try {
                             fileWriter.StreamOut(out);
                         } catch (IOException e) {
@@ -437,8 +439,8 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         a.Zvit_Delta=true;
         for(int i=0; i< Kol_class;i++){
             //FileUtil reader=new FileUtil("Matrix"+i+".txt");
-            String path ="F:\\IEIT\\classes\\"+i+"\\"+i+"1.png";
-            BufferedImage image= new BufferedImage(path);
+            String path ="F:\\IEIT\\classes\\"+(i+1)+"\\"+(i+1)+"1.png";
+            BufferedImage image= ImgModule.loadImage(path);
             //int[][]array= reader.ReadFile(Kol_realiz);
             int[][]array= ImgModule.imageToMatrix(image);
             for(int o=0; o< Kol_oznak;o++){
@@ -450,18 +452,18 @@ for (int Klass=0;Klass<Kol_class;Klass++){
         }
 
         a.Zvit_Radius_Center=false;
-        Parallel_System_Dopusk(15);
+        Parallel_System_Dopusk(50);
         a.Zvit_Radius_Center=true;
-       // a.System_Dopuskov();
+        //a.System_Dopuskov();
         a.Nav4();
 
-        BufferedImage input = ImgModule.loadImage("G:\\magistr\\project\\recognition\\recogn\\src\\origin.png");
+        BufferedImage input = ImgModule.loadImage("F:\\IEIT\\input\\input.png");
         Exam examenator = new Exam();
-        ArrayList<ImOperator> imgs = ImgModule.imageSplit(input, 20);
-        for (ImOperator img : imgs)
+        ArrayList<ImOperator> imgs = ImgModule.imageSplit(input, 100);
+       /* for (ImOperator img : imgs)
         {
             String nm;
-            ClassRec recognized = examenator.recognize(img.getEtalonVector());
+            Exam.ExamData recognized = examenator.recognize(ClassRec.getEtalonVector());
             if(recognized != null)
             {
                 nm = recognized.getName();
@@ -473,12 +475,12 @@ for (int Klass=0;Klass<Kol_class;Klass++){
 
             ImgModule.drawBorder(img.getSurfaceImage(), Color.BLACK);
             ImgModule.drawText(img.getSurfaceImage(), nm, Color.BLACK, 0, 20);
-        }
+        }*/
 
         BufferedImage output = ImgModule.imageBuild(imgs, input.getWidth(), input.getHeight());
-        ImgModule.imageWrite(output, "G:\\magistr\\project\\recognition\\recogn\\src\\output.png");
+        ImgModule.imageWrite(output, "F:\\IEIT\\input\\output.png");
 
     }
     }
-}
+
 
